@@ -39,5 +39,5 @@ jobs:
         with:
           commit_message: Github Actions Build
           branch: bin
-          file_pattern: /dream
+          file_pattern: ./dream
           create_branch: true
