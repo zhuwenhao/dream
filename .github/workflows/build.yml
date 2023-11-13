@@ -6,6 +6,9 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
   build:
     concurrency: ci-${{ github.ref }}
@@ -29,4 +32,12 @@ jobs:
         run: |
           dart pub global run dart_frog_cli:dart_frog build
           dart pub get --offline
-          dart compile exe build/bin/server.dart -o dream
+          dart compile exe build/bin/server.dart -o build/bin/dream
+
+      - name: Commit exe file
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Github Actions Build
+          branch: bin
+          file_pattern: build/bin/dream
+          create_branch: true
