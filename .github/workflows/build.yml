@@ -38,6 +38,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Github Actions Build
-          branch: bin
           file_pattern: ./dream
-          create_branch: true
