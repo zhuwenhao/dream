@@ -41,7 +41,7 @@ Response onRequest(RequestContext context, String domain) {
                     ..element(
                       'description',
                       nest: () {
-                        builder.cdata('<p>P标签</p>');
+                        builder.cdata('<p>P标签</p><p>P标签</p>');
                       },
                     );
                 },
