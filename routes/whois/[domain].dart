@@ -42,7 +42,7 @@ Response onRequest(RequestContext context, String domain) {
                       'description',
                       nest: () {
                         builder.cdata(
-                          '<div>更新时间</div><div>2023年06月10日</div><div></div><div>创建时间</div><div>2022年07月01日</div><div>过期时间</div><div>2024年07月01日</div>',
+                          '<div>更新时间</div><div>2023年06月10日</div>\n<div>创建时间</div><div>2022年07月01日</div><div>过期时间</div><div>2024年07月01日</div>',
                         );
                       },
                     )
