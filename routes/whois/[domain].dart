@@ -43,7 +43,8 @@ Response onRequest(RequestContext context, String domain) {
                       nest: () {
                         builder.cdata('<p>P标签</p><p>P标签</p>');
                       },
-                    );
+                    )
+                    ..element('link', nest: 'https://whois.chinaz.com/$domain');
                 },
               );
           },
