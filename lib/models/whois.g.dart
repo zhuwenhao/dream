@@ -11,5 +11,6 @@ Whois _$WhoisFromJson(Map<String, dynamic> json) => Whois(
       domainName: json['domain_name'] as String? ?? '',
       expirationDate: json['expiration_date'] as String? ?? '',
       registrar: json['registrar'] as String? ?? '',
+      status: json['status'] as String? ?? '',
       updatedDate: json['updated_date'] as String? ?? '',
     );

@@ -31,6 +31,8 @@ Response onRequest(RequestContext context, String domain) {
 <div>${whois.expirationDate}</div>
 <div>更新时间</div>
 <div>${whois.updatedDate}</div>
+<div>状态</div>
+<div>${whois.status}</div>
 ''';
 
   final builder = XmlBuilder();

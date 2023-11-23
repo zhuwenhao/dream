@@ -9,6 +9,7 @@ class Whois {
     this.domainName = '',
     this.expirationDate = '',
     this.registrar = '',
+    this.status = '',
     this.updatedDate = '',
   });
 
@@ -21,6 +22,8 @@ class Whois {
   final String expirationDate;
 
   final String registrar;
+
+  final String status;
 
   final String updatedDate;
 }
