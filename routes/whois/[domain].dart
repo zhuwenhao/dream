@@ -22,25 +22,15 @@ Response onRequest(RequestContext context, String domain) {
   final whois = Whois.fromJson(json['result'] as Map<String, dynamic>);
 
   final description = '''
-注册商
-<br>
-${whois.registrar}
-<br>
-创建时间
-<br>
-${whois.creationDate}
-<br>
-过期时间
-<br>
-${whois.expirationDate}
-<br>
-更新时间
-<br>
-${whois.updatedDate}
-<br>
-<br>
-状态
-<br>
+<b>注册商</b><br>
+${whois.registrar}<br><br>
+<b>创建时间</b><br>
+${whois.creationDate}<br><br>
+<b>过期时间</b><br>
+${whois.expirationDate}<br><br>
+<b>更新时间</b><br>
+${whois.updatedDate}<br><br>
+<b>状态</b><br>
 ${whois.status}
 ''';
 
