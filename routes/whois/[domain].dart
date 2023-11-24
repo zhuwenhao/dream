@@ -22,16 +22,16 @@ Response onRequest(RequestContext context, String domain) {
   final whois = Whois.fromJson(json['result'] as Map<String, dynamic>);
 
   final description = '''
-<b>注册商</b><br>
-${whois.registrar}<br><br>
-<b>创建时间</b><br>
-${whois.creationDate}<br><br>
-<b>过期时间</b><br>
-${whois.expirationDate}<br><br>
-<b>更新时间</b><br>
-${whois.updatedDate}<br><br>
-<b>状态</b><br>
-${whois.status}
+注册商<br>
+<b>${whois.registrar}</b><br><br>
+创建时间<br>
+<b>${whois.creationDate}</b><br><br>
+过期时间<br>
+<b>${whois.expirationDate}</b><br><br>
+更新时间<br>
+<b>${whois.updatedDate}</b><br><br>
+状态<br>
+<b>${whois.status}</b>
 ''';
 
   final builder = XmlBuilder();
