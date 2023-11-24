@@ -29,9 +29,9 @@ Future<Response> onRequest(RequestContext context, String domain) async {
   final description = '''
 <b>注册商：</b><br>
 ${whois.registrar}<br><br>
-<b>创建时间：</b><br>
+<b>注册时间：</b><br>
 ${whois.creationDate} (UTC+0)<br><br>
-<b>过期时间：</b><br>
+<b>到期时间：</b><br>
 ${whois.expirationDate} (UTC+0)<br><br>
 <b>更新时间：</b><br>
 ${whois.updatedDate} (UTC+0)<br><br>
