@@ -1,39 +1,42 @@
 import 'dart:convert';
 
 import 'package:dart_frog/dart_frog.dart';
+import 'package:dio/dio.dart' as dio;
+import 'package:dream/constants.dart';
 import 'package:dream/models/whois.dart';
 import 'package:dream/utils/ext.dart';
 import 'package:intl/intl.dart';
 import 'package:xml/xml.dart';
 
-const whoisJson = '''
-{
-    "result": {
-        "domain_name": "zhuwenhao.me",
-        "creation_date": "2022-07-01 03:17:05",
-        "updated_date": "2023-06-10 07:56:23",
-        "expiration_date": "2024-07-01 03:17:05",
-        "registrar": "Cloudflare, Inc",
-        "status": "clientTransferProhibited https://icann.org/epp#clientTransferProhibited"
-    }
-}
-''';
+Future<Response> onRequest(RequestContext context, String domain) async {
+  Whois whois;
+  try {
+    final res = await dio.Dio().get<String>(
+      'https://api.apilayer.com/whois/query',
+      queryParameters: {'domain': domain},
+      options: dio.Options(
+        headers: {'apikey': 'cJ2qy4DK7gxQwJyW0WUr7KQ5dpPjN03t'},
+        responseType: dio.ResponseType.plain,
+      ),
+    );
+    final json = jsonDecode(res.data.toString()) as Map<String, dynamic>;
+    whois = Whois.fromJson(json['result'] as Map<String, dynamic>);
+  } catch (e) {
+    return Response(statusCode: 500);
+  }
 
-Response onRequest(RequestContext context, String domain) {
-  final json = jsonDecode(whoisJson) as Map<String, dynamic>;
-  final whois = Whois.fromJson(json['result'] as Map<String, dynamic>);
-
+  final status = whois.status.split(' ').first;
   final description = '''
 <b>注册商：</b><br>
 ${whois.registrar}<br><br>
 <b>创建时间：</b><br>
-${whois.creationDate}<br><br>
+${whois.creationDate} (UTC+0)<br><br>
 <b>过期时间：</b><br>
-${whois.expirationDate}<br><br>
+${whois.expirationDate} (UTC+0)<br><br>
 <b>更新时间：</b><br>
-${whois.updatedDate}<br><br>
+${whois.updatedDate} (UTC+0)<br><br>
 <b>状态：</b><br>
-${whois.status}
+$status (${domainStatus[status] ?? status})
 ''';
 
   final pubDate = DateFormat('yyyy-MM-dd HH:mm:ss')
