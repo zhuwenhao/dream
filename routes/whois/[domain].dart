@@ -25,6 +25,8 @@ Future<Response> onRequest(RequestContext context, String domain) async {
     return Response(statusCode: 500);
   }
 
+  final title = '${whois.domainName.toUpperCase()}的域名信息';
+
   final status = whois.status.split(' ').first;
   final description = '''
 <b>注册商：</b><br>
@@ -38,7 +40,6 @@ ${whois.updatedDate} (UTC+0)<br><br>
 <b>状态：</b><br>
 $status (${domainStatus[status] ?? status})
 ''';
-
   final pubDate = DateFormat('yyyy-MM-dd HH:mm:ss')
       .parse(whois.updatedDate, true)
       .toRfc822String();
@@ -57,9 +58,9 @@ $status (${domainStatus[status] ?? status})
           'channel',
           nest: () {
             builder
-              ..element('title', nest: () => builder.cdata('域名信息查询'))
+              ..element('title', nest: () => builder.cdata(title))
               ..element('link', nest: 'https://apilayer.com')
-              ..element('description', nest: () => builder.cdata('域名信息查询'))
+              ..element('description', nest: () => builder.cdata(title))
               ..element(
                 'lastBuildDate',
                 nest: DateTime.now().toUtc().toRfc822String(),
@@ -68,12 +69,7 @@ $status (${domainStatus[status] ?? status})
                 'item',
                 nest: () {
                   builder
-                    ..element(
-                      'title',
-                      nest: () {
-                        builder.cdata('${whois.domainName.toUpperCase()}的域名信息');
-                      },
-                    )
+                    ..element('title', nest: () => builder.cdata(title))
                     ..element(
                       'description',
                       nest: () => builder.cdata(description),
