@@ -27,7 +27,6 @@ Future<Response> onRequest(RequestContext context, String domain) async {
 
   final title = '${whois.domainName.toUpperCase()}的域名信息';
 
-  final status = whois.status.split(' ').first;
   final description = '''
 <b>注册商：</b><br>
 ${whois.registrar}<br><br>
@@ -38,7 +37,7 @@ ${whois.expirationDate} (UTC+0)<br><br>
 <b>更新时间：</b><br>
 ${whois.updatedDate} (UTC+0)<br><br>
 <b>状态：</b><br>
-$status (${domainStatus[status] ?? status})
+${whois.status.map((state) => '$state (${domainStatus[state] ?? '-'})').join('<br>')}
 ''';
   final pubDate = DateFormat('yyyy-MM-dd HH:mm:ss')
       .parse(whois.updatedDate, true)

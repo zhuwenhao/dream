@@ -9,7 +9,7 @@ class Whois {
     this.domainName = '',
     this.expirationDate = '',
     this.registrar = '',
-    this.status = '',
+    this.status = const [],
     this.updatedDate = '',
   });
 
@@ -23,7 +23,20 @@ class Whois {
 
   final String registrar;
 
-  final String status;
+  @JsonKey(readValue: _readStatus)
+  final List<String> status;
 
   final String updatedDate;
+
+  static Object? _readStatus(Map<dynamic, dynamic> json, String key) {
+    final value = json[key];
+
+    if (value is String) {
+      return [value.split(' ').first];
+    } else if (value is List<dynamic>) {
+      return value.map((state) => state.toString().split(' ').first).toList();
+    }
+
+    return json[key];
+  }
 }

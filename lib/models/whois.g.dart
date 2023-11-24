@@ -11,6 +11,9 @@ Whois _$WhoisFromJson(Map<String, dynamic> json) => Whois(
       domainName: json['domain_name'] as String? ?? '',
       expirationDate: json['expiration_date'] as String? ?? '',
       registrar: json['registrar'] as String? ?? '',
-      status: json['status'] as String? ?? '',
+      status: (Whois._readStatus(json, 'status') as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
       updatedDate: json['updated_date'] as String? ?? '',
     );
