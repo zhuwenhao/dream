@@ -7,7 +7,6 @@ import 'package:xml/xml.dart';
 const whoisJson = '''
 {
     "result": {
-        "domain_id": "6e25d31c441a41b68b46f9f279bad93a-DONUTS",
         "domain_name": "zhuwenhao.me",
         "creation_date": "2022-07-01 03:17:05",
         "updated_date": "2023-06-10 07:56:23",
@@ -23,16 +22,26 @@ Response onRequest(RequestContext context, String domain) {
   final whois = Whois.fromJson(json['result'] as Map<String, dynamic>);
 
   final description = '''
-<div>注册商</div>
-<div>${whois.registrar}</div>
-<div>创建时间</div>
-<div>${whois.creationDate}</div>
-<div>过期时间</div>
-<div>${whois.expirationDate}</div>
-<div>更新时间</div>
-<div>${whois.updatedDate}</div>
-<div>状态</div>
-<div>${whois.status}</div>
+注册商
+<br>
+${whois.registrar}
+<br>
+创建时间
+<br>
+${whois.creationDate}
+<br>
+过期时间
+<br>
+${whois.expirationDate}
+<br>
+更新时间
+<br>
+${whois.updatedDate}
+<br>
+<br>
+状态
+<br>
+${whois.status}
 ''';
 
   final builder = XmlBuilder();
