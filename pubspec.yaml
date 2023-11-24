@@ -9,6 +9,7 @@ environment:
 dependencies:
   dart_frog: ^1.0.0
   dio: ^5.3.3
+  intl: ^0.18.1
   json_annotation: ^4.8.1
   shelf_cors_headers: ^0.1.5
   xml: ^6.4.2

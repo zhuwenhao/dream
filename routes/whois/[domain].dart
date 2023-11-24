@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:dart_frog/dart_frog.dart';
 import 'package:dream/models/whois.dart';
+import 'package:dream/utils/ext.dart';
+import 'package:intl/intl.dart';
 import 'package:xml/xml.dart';
 
 const whoisJson = '''
@@ -22,17 +24,21 @@ Response onRequest(RequestContext context, String domain) {
   final whois = Whois.fromJson(json['result'] as Map<String, dynamic>);
 
   final description = '''
-注册商<br>
-<b>${whois.registrar}</b><br><br>
-创建时间<br>
-<b>${whois.creationDate}</b><br><br>
-过期时间<br>
-<b>${whois.expirationDate}</b><br><br>
-更新时间<br>
-<b>${whois.updatedDate}</b><br><br>
-状态<br>
-<b>${whois.status}</b>
+<b>注册商：</b><br>
+${whois.registrar}<br><br>
+<b>创建时间：</b><br>
+${whois.creationDate}<br><br>
+<b>过期时间：</b><br>
+${whois.expirationDate}<br><br>
+<b>更新时间：</b><br>
+${whois.updatedDate}<br><br>
+<b>状态：</b><br>
+${whois.status}
 ''';
+
+  final pubDate = DateFormat('yyyy-MM-dd HH:mm:ss')
+      .parse(whois.updatedDate, true)
+      .toRfc822String();
 
   final builder = XmlBuilder();
   builder
@@ -50,16 +56,11 @@ Response onRequest(RequestContext context, String domain) {
             builder
               ..element('title', nest: () => builder.cdata('域名信息查询'))
               ..element('link', nest: 'https://apilayer.com')
-              ..element(
-                'atom:link',
-                attributes: {
-                  'href': context.request.uri.toString(),
-                  'rel': 'self',
-                  'type': 'application/rss+xml',
-                },
-              )
               ..element('description', nest: () => builder.cdata('域名信息查询'))
-              ..element('generator', nest: '猪蚊耗')
+              ..element(
+                'lastBuildDate',
+                nest: DateTime.now().toUtc().toRfc822String(),
+              )
               ..element(
                 'item',
                 nest: () {
@@ -72,11 +73,13 @@ Response onRequest(RequestContext context, String domain) {
                     )
                     ..element(
                       'description',
-                      nest: () {
-                        builder.cdata(description);
-                      },
+                      nest: () => builder.cdata(description),
                     )
-                    ..element('link', nest: 'https://whois.chinaz.com/$domain');
+                    ..element(
+                      'link',
+                      nest: 'https://whois.chinaz.com/${whois.domainName}',
+                    )
+                    ..element('pubDate', nest: pubDate);
                 },
               );
           },
