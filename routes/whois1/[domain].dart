@@ -1,47 +1,68 @@
-import 'dart:convert';
-
 import 'package:dart_frog/dart_frog.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:dream/constants.dart';
-import 'package:dream/models/whois.dart';
 import 'package:dream/utils/ext.dart';
 import 'package:intl/intl.dart';
 import 'package:xml/xml.dart';
 
 Future<Response> onRequest(RequestContext context, String domain) async {
-  Whois whois;
+  String domainName;
+  String registrar;
+  String creationDate;
+  String expirationDate;
+  String updatedDate;
+  List<String> status;
+
   try {
     final res = await dio.Dio().get<String>(
-      'https://api.apilayer.com/whois/query',
+      'https://domains.upperlink.ng/wp-content/plugins/whmpress/whois.php',
       queryParameters: {'domain': domain},
-      options: dio.Options(
-        headers: {'apikey': 'cJ2qy4DK7gxQwJyW0WUr7KQ5dpPjN03t'},
-        responseType: dio.ResponseType.plain,
-      ),
+      options: dio.Options(responseType: dio.ResponseType.plain),
     );
-    final json = jsonDecode(res.data.toString()) as Map<String, dynamic>;
-    whois = Whois.fromJson(json['result'] as Map<String, dynamic>);
+
+    final data = res.data ?? '';
+
+    var regExp = RegExp('(?<=Domain Name: ).+');
+    domainName = regExp.stringMatch(data) ?? '';
+
+    regExp = RegExp('(?<=Registrar: ).+');
+    registrar = regExp.stringMatch(data) ?? '';
+
+    regExp = RegExp('(?<=Creation Date: ).+');
+    creationDate = DateFormat('yyyy-MM-dd HH:mm:ss')
+        .format(DateTime.parse(regExp.stringMatch(data) ?? ''));
+
+    regExp = RegExp('(?<=Registry Expiry Date: ).+');
+    expirationDate = DateFormat('yyyy-MM-dd HH:mm:ss')
+        .format(DateTime.parse(regExp.stringMatch(data) ?? ''));
+
+    regExp = RegExp('(?<=Updated Date: ).+');
+    updatedDate = DateFormat('yyyy-MM-dd HH:mm:ss')
+        .format(DateTime.parse(regExp.stringMatch(data) ?? ''));
+
+    regExp = RegExp(r'(?<=Domain Status: ).+(?= https:\/\/icann\.org\/epp)');
+    status = regExp.allMatches(data).map((m) => m.group(0) ?? '').toList();
   } catch (e) {
     return Response(statusCode: 500);
   }
 
-  final title = '${whois.domainName.toUpperCase()}的域名信息';
+  final title = '${domainName.toUpperCase()}的域名信息';
 
   final description = '''
 <b>注册商：</b><br>
-${whois.registrar}<br><br>
+$registrar<br><br>
 <b>注册时间：</b><br>
-${whois.creationDate} (UTC+0)<br><br>
+$creationDate (UTC+0)<br><br>
 <b>到期时间：</b><br>
-${whois.expirationDate} (UTC+0)<br><br>
+$expirationDate (UTC+0)<br><br>
 <b>更新时间：</b><br>
-${whois.updatedDate} (UTC+0)<br><br>
+$updatedDate (UTC+0)<br><br>
 <b>状态：</b><br>
-${whois.status.map((state) => '$state (${domainStatus[state] ?? '-'})').join('<br>')}
+${status.map((state) => '$state (${domainStatus[state] ?? '-'})').join('<br>')}
 ''';
 
   final pubDate = DateFormat('yyyy-MM-dd HH:mm:ss')
-      .parse(whois.updatedDate, true)
+      .parse(updatedDate, true)
       .toRfc822String();
 
   final builder = XmlBuilder();
@@ -59,7 +80,7 @@ ${whois.status.map((state) => '$state (${domainStatus[state] ?? '-'})').join('<b
           nest: () {
             builder
               ..element('title', nest: () => builder.cdata(title))
-              ..element('link', nest: 'https://apilayer.com')
+              ..element('link', nest: 'https://domains.upperlink.ng')
               ..element('description', nest: () => builder.cdata(title))
               ..element(
                 'lastBuildDate',
@@ -76,7 +97,7 @@ ${whois.status.map((state) => '$state (${domainStatus[state] ?? '-'})').join('<b
                     )
                     ..element(
                       'link',
-                      nest: 'https://whois.chinaz.com/${whois.domainName}',
+                      nest: 'https://whois.com/whois/$domainName',
                     )
                     ..element('pubDate', nest: pubDate);
                 },
