@@ -13,3 +13,10 @@ extension DateTimeExtension on DateTime {
     return str;
   }
 }
+
+extension StringExtension on String? {
+  String toBeijingTimeString() {
+    return DateFormat('yyyy-MM-dd HH:mm:ss')
+        .format(DateTime.parse(this ?? '').add(const Duration(hours: 8)));
+  }
+}
