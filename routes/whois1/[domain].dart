@@ -45,7 +45,9 @@ $expirationDate（北京时间）<br><br>
 <b>更新时间：</b><br>
 $updatedDate（北京时间）<br><br>
 <b>状态：</b><br>
-${status.map((state) => '$state （${domainStatus[state] ?? '-'}）').join('<br>')}
+${status.map((state) => '$state（${domainStatus[state] ?? '-'}）').join('<br>')}<br><br>
+<b>删除时间：</b><br>
+${expirationDate.toDomainDeleteTimeString()}
 ''';
 
     final pubDate = DateFormat('yyyy-MM-dd HH:mm:ss')
