@@ -20,15 +20,4 @@ extension StringExtension on String? {
       DateTime.parse(this ?? '').toUtc().add(const Duration(hours: 8)),
     );
   }
-
-  String toDomainDeleteTimeString() {
-    var date = DateTime.parse(this ?? '').toUtc();
-    date = DateTime(date.year, date.month, date.day);
-    final date1 = date.add(const Duration(days: 65));
-    final date1String = DateFormat('yyyy-MM-dd').format(date1);
-    final date2 = date.add(const Duration(days: 75));
-    final date2String = DateFormat('yyyy-MM-dd').format(date2);
-
-    return '北京时间$date1String或$date2String，凌晨2点到4点，仅供参考';
-  }
 }

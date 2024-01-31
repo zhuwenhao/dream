@@ -33,9 +33,7 @@ ${whois.expirationDate.toBeijingTimeString()}（北京时间）<br><br>
 <b>更新时间：</b><br>
 ${whois.updatedDate.toBeijingTimeString()}（北京时间）<br><br>
 <b>状态：</b><br>
-${whois.status.map((state) => '$state（${domainStatus[state] ?? '-'}）').join('<br>')}<br><br>
-<b>删除时间：</b><br>
-${whois.expirationDate.toDomainDeleteTimeString()}
+${whois.status.map((state) => '$state（${domainStatus[state] ?? '-'}）').join('<br>')}
 ''';
 
     final pubDate = DateFormat('yyyy-MM-dd HH:mm:ss')
