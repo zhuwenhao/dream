@@ -67,8 +67,8 @@ ${status.map((state) => '$state（${domainStatus[state] ?? '-'}）').join('<br>'
             nest: () {
               builder
                 ..element('title', nest: () => builder.cdata(title))
-                ..element('link', nest: 'https://domains.upperlink.ng')
                 ..element('description', nest: () => builder.cdata(title))
+                ..element('link', nest: 'https://domains.upperlink.ng')
                 ..element(
                   'lastBuildDate',
                   nest: DateTime.now().toUtc().toRfc822String(),
@@ -85,6 +85,11 @@ ${status.map((state) => '$state（${domainStatus[state] ?? '-'}）').join('<br>'
                       ..element(
                         'link',
                         nest: 'https://whois.chinaz.com/$domainName',
+                      )
+                      ..element(
+                        'guid',
+                        attributes: {'isPermaLink': 'false'},
+                        nest: pubDate,
                       )
                       ..element('pubDate', nest: pubDate);
                   },

@@ -55,8 +55,8 @@ ${whois.status.map((state) => '$state（${domainStatus[state] ?? '-'}）').join(
             nest: () {
               builder
                 ..element('title', nest: () => builder.cdata(title))
-                ..element('link', nest: 'https://apilayer.com')
                 ..element('description', nest: () => builder.cdata(title))
+                ..element('link', nest: 'https://apilayer.com')
                 ..element(
                   'lastBuildDate',
                   nest: DateTime.now().toUtc().toRfc822String(),
@@ -73,6 +73,11 @@ ${whois.status.map((state) => '$state（${domainStatus[state] ?? '-'}）').join(
                       ..element(
                         'link',
                         nest: 'https://whois.chinaz.com/${whois.domainName}',
+                      )
+                      ..element(
+                        'guid',
+                        attributes: {'isPermaLink': 'false'},
+                        nest: pubDate,
                       )
                       ..element('pubDate', nest: pubDate);
                   },
